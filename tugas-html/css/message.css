@@ -204,7 +204,7 @@ textarea {
     margin-top: 30px;
   }
 
-  input[type="email"]{
+  #email{
     width: 50%;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -965,4 +965,11 @@ textarea {
         transform: scale(1);
     }
 }
+}
+
+input[type="text"]:hover,#email:hover{
+  border: 2px solid #69a197;
+  transform: scale(1.1);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
 }
