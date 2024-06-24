@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Diki Maulana</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<style>
+    .home-page__box {
+        margin-top: 1rem;
+        background-image: url(../../asset/header.png);
+        background-repeat: no-repeat;
+        background-position: bottom;
+        min-height: 80vh;
+        width: 100%;
+        background-position: right;
+        background-color: #69A197;
+        display: flex;
+        align-items: center;
+    }
+</style>
+<script>
+     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+</head>
+<body>
+    <div class="container-fluid">
+        <header class="d-flex flex-wrap justify-content-center py-3 shadow border-bottom px-0">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">Diki Maulana</span>
+            </a>
+
+            <ul class="nav nav-pills">
+            <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="#message" class="nav-link">Message Us</a></li>
+            </ul>
+        </header>
+        <div class="row">
+            <div class="home-page__box p-1">
+                <div class="container-fluid">
+                   <div class="row">
+                    <div class="col-md-5">
+                        <h1 class="text-white fw-bold">Welcome To My Website</h1>
+                        <h5 class="text-white">Created By Diki Maulana</h5>
+                        
+                        <button type="button" class="btn btn-primary col-md-12 mt-3 shadow" data-bs-toggle="modal" data-bs-target="#Portfolio">
+                            My Portfolio
+                          </button>
+                    </div>
+                    <div class="col-md-7"></div>
+                   </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="mt-4 p-5 bg-secondary text-white rounded" id="message">
+                    <div class="col-md-12 text-center">
+                        <h1>Message Us</h1>
+                        <hr>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form id="formInput">
+                                    <div class="row">
+                                        <label for="nama" class="col-md-4">Nama</label>
+                                        <div class="col-md-8">
+                                            <input type="text" name="nama" id="nama" class="form-control inputan" placeholder="Masukan Nama">
+                                        </div>
+
+                                        <label for="email" class="col-md-4 mt-3">Email</label>
+                                        <div class="col-md-8 mt-3">
+                                            <input type="Email" name="email" id="email" class="form-control inputan" placeholder="Masukan Email">
+                                        </div>
+
+                                        <label for="telp" class="col-md-4 mt-3">Telpon</label>
+                                        <div class="col-md-8 mt-3">
+                                            <input type="text" name="telp" id="telp" class="form-control inputan" placeholder="Masukan Nomor Telpon" maxlength="13" 
+                                            onkeypress="if(event.keyCode < 48 || event.keyCode > 57) event.preventDefault();"
+                                            >
+                                        </div>
+
+                                        <label for="pesan" class="col-md-4 mt-3">pesan</label>
+                                        <div class="col-md-8 mt-3">
+                                            <textarea name="pesan" id="pesan" rows="5" class="form-control inputan" placeholder="Masukan Pesan"></textarea>
+                                        </div>
+                                        <div class="col-md-12 text-end mt-3">
+                                            <button type="reset" class="btn btn-danger me-3" onclick="reset()"data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+                                            <button type="button" class="btn btn-success" onclick="kirim()" ><i class="bi bi-send"></i> Kirim</button>
+                                            <button type="button" class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#preview"><i class="bi bi-search"></i> Preview Data</button>
+                                           
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-6 bg-light rounded">
+                                <div class="col-md-12 text-center p-3">
+                                    <h6 class="text-secondary">Preview Message</h6>
+                                    <hr class="text-secondary">
+                                </div>
+                                <div class="row p-3">
+                                    <label for="p_nama" class="col-md-4 text-dark p-0 m-0">Nama</label>
+                                    <div class="col-md-8">
+                                        <span class="text-dark" id="p_nama">:</span>
+                                    </div>
+
+                                    <label for="p_email" class="col-md-4 text-dark p-0 mt-3">email</label>
+                                    <div class="col-md-8 mt-3">
+                                        <span class="text-dark" id="p_email">:</span>
+                                    </div>
+                                    <label for="p_telp" class="col-md-4 text-dark p-0 mt-3">Telpon</label>
+                                    <div class="col-md-8 mt-3">
+                                        <span class="text-dark" id="p_telp">:</span>
+                                    </div>
+                                    <label for="p_pesan" class="col-md-4 text-dark p-0 mt-3">pesan</label>
+                                    <div class="col-md-8 mt-3">
+                                        <span class="text-dark" id="p_pesan">:</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bagian Modalnya -->
+    <div class="modal fade" id="preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Data Yang Telah Di Kirimkan</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped table-hover" id="tableHasil">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Telpon</th>
+                        <th>Pesan</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="Portfolio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">OUR Portfolio</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner bg-secondary">
+                      <div class="carousel-item active">
+                        <img src="../asset/struktur1.png" class="d-block w-100" alt="Portfolio ke 1">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../asset/struktur2.png" class="d-block w-100" alt="Portfolio ke 2">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../asset/struktur3.png" class="d-block w-100" alt="Portfolio ke 3">
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+<script>
+   
+$(".inputan").keyup(function(){
+    let val = $(this).val();
+    let id = $(this).attr("id");
+    $("#p_"+id).text(": " + val);
+});
+
+function kirim(){
+const nama = $("#nama").val();
+const email = $("#email").val();
+const telp = $("#telp").val();
+const pesan = $("#pesan").val();
+$("#tableHasil tbody").prepend(`
+<tr>
+    <td>${nama}</td>
+    <td>${email}</td>
+    <td>${telp}</td>
+    <td>${pesan}</td>
+</tr>
+`);
+}
+
+function reset(){
+    $("#formInput").trigger("reset");
+    $("#p_nama").text(": ");
+    $("#p_email").text(": ");
+    $("#p_telp").text(": ");
+    $("#p_pesan").text(": ");
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
