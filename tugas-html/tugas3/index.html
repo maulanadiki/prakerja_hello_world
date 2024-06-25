@@ -20,7 +20,12 @@
         display: flex;
         align-items: center;
     }
+    #clock {
+            font-size: 24px;
+            font-weight: bold;
+        }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -57,6 +62,11 @@
             </div>
             <div class="col-md-12">
                 <div class="mt-4 p-5 bg-secondary text-white rounded" id="message">
+                  <div class="col-md-12 text-end">
+                    <div id="clock"></div>
+                    <label for="warnaJam" class="h5">Choose Clock Color : </label>
+                    <input type="color" id="warnaJam" name="warnaJam" value="#ffffff" />
+                  </div>
                     <div class="col-md-12 text-center">
                         <h1>Message Us</h1>
                         <hr>
@@ -87,6 +97,14 @@
                                         <div class="col-md-8 mt-3">
                                             <textarea name="pesan" id="pesan" rows="5" class="form-control inputan" placeholder="Masukan Pesan"></textarea>
                                         </div>
+
+                                        <label for="email" class="col-md-4 mt-3">Suhu Udara &deg;C</label>
+                                        <div class="col-md-8 mt-3">
+                                            <input type="text" name="suhu" id="suhu" class="form-control inputan" placeholder="Suhu Udara" maxlength="3"
+                                            onkeypress="if(event.keyCode < 48 || event.keyCode > 57) event.preventDefault();"
+                                            >
+                                        </div>
+
                                         <div class="col-md-12 text-end mt-3">
                                             <button type="reset" class="btn btn-danger me-3" onclick="reset()"data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"><i class="bi bi-arrow-clockwise"></i> Reset</button>
                                             <button type="button" class="btn btn-success" onclick="kirim()" ><i class="bi bi-send"></i> Kirim</button>
@@ -118,6 +136,10 @@
                                     <label for="p_pesan" class="col-md-4 text-dark p-0 mt-3">pesan</label>
                                     <div class="col-md-8 mt-3">
                                         <span class="text-dark" id="p_pesan">:</span>
+                                    </div>
+                                    <label for="p_suhu" class="col-md-4 text-dark p-0 mt-3">Suhu</label>
+                                    <div class="col-md-8 mt-3">
+                                        <span class="text-dark" id="p_suhu">:</span>
                                     </div>
                                 </div>
                             </div>
@@ -198,26 +220,88 @@
         </div>
       </div>
 <script>
-   
+$(document).ready(function() {
+  function updateClock() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const date = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+
+      const dateString = `${date}-${month}-${year}`;
+      const timeString = `${hours}:${minutes}:${seconds}`;
+      const dateTimeString = `${dateString} ${timeString}`;
+
+      $('#clock').text(dateTimeString);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+    $("#warnaJam").on("input", function() {
+        let val = $(this).val();
+        $("#clock").css("color", val);
+    });
+});
+   var Msgbox = {
+     success: function(title, msg){
+       Swal.fire({
+         icon: 'success',
+         title: title,
+         text: msg
+       });
+     },
+     failed: function(title, msg){
+       Swal.fire({
+         icon: 'error',
+         title: title,
+         text: msg
+       });
+     }
+   }
+
+
+
+
 $(".inputan").keyup(function(){
     let val = $(this).val();
     let id = $(this).attr("id");
     $("#p_"+id).text(": " + val);
+    if(id == 'suhu'){
+      let val = parseInt($(this).val());
+      let farenheit = (val * 9/5) + 32;
+      $("#p_suhu").html(": " + farenheit + " &deg;F");
+    }
 });
 
 function kirim(){
-const nama = $("#nama").val();
-const email = $("#email").val();
-const telp = $("#telp").val();
-const pesan = $("#pesan").val();
-$("#tableHasil tbody").prepend(`
-<tr>
-    <td>${nama}</td>
-    <td>${email}</td>
-    <td>${telp}</td>
-    <td>${pesan}</td>
-</tr>
-`);
+  const email = $("#email").val();
+  const telp = $("#telp").val();
+  const formatEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const nama = $("#nama").val();
+  const pesan = $("#pesan").val();
+
+  if(formatEmail.test(email) == true && telp.length >= 12){
+    Msgbox.success("Terima Kasih", "Terima Kasih Telah Menghubungi Kami");
+    $("#tableHasil tbody").prepend(`
+          <tr>
+              <td>${nama}</td>
+              <td>${email}</td>
+              <td>${telp}</td>
+              <td>${pesan}</td>
+          </tr>
+    `);
+  }else{
+    if(formatEmail.test(email) == false){
+      Msgbox.failed("Email Tidak Valid", "Email yang anda masukan Tidak Sesuai");
+    }
+
+    if(telp.length < 12){
+      Msgbox.failed("Nomor Telp Tidak Valid", "Nomor Telp yang anda masukan Tidak Sesuai");
+    }
+    
+  }
+
 }
 
 function reset(){
