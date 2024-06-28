@@ -7,11 +7,21 @@ import {
   Button,
   Stack,
   Modal,
-  Table
+  Table,
+  Alert
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 
 const Formulir = () => {
+  const [idCount, setIdCount] = useState(0)
+  const [countDelete,setCountDelete] = useState(0)
+  const [showAlert, setShowAlert] = useState(false);
+  const [data, setData] = useState([]);
+  const [lgShow, setLgShow] = useState(false);
+  const [isSubmitted,setIsSubmitted] = useState(false)
+  const [hasError, setHasError] = useState(false);
+
   const [formData, setFormData] = useState({
     nama: "",
     email: "",
@@ -19,8 +29,7 @@ const Formulir = () => {
     deskripsi: "",
     deadline: ""
   });
-  const [data, setData] = useState([]);
-  const [lgShow, setLgShow] = useState(false);
+  
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -32,15 +41,26 @@ const Formulir = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setData((prevData) => [...prevData, formData]);
+    if (!formData.nama || !formData.email || !formData.telp || !formData.deskripsi || !formData.deadline) {
+      setHasError(true);
+      setIsSubmitted(false);
+      return;
+    }
+    const newFormData = { ...formData, id: idCount };
+    setData((prevData) => [...prevData, newFormData]);
+    setIdCount((prevCount) => prevCount + 1);
     setFormData({
+      id: "",
       nama: "",
       email: "",
       telp: "",
       deskripsi: "",
-      deadline: ""
+      deadline: "",
     });
+    setIsSubmitted(true);
+    setShowAlert(true); 
   };
+  
 
   const handleReset = () => {
     setFormData({
@@ -59,9 +79,41 @@ const Formulir = () => {
       [id]: value
     }))
   }
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((data) => data.id !== id));
+    setCountDelete(prevCount => prevCount + 1)
 
+  }
+useEffect(() => {
+    if (isSubmitted) {
+      setShowAlert(true);
+    }
+
+    if (hasError || showAlert) {
+      const timer = setTimeout(() => {
+        setHasError(false);
+        setShowAlert(false);
+      }, 2000);
+  
+      return () => clearTimeout(timer);
+    }
+   
+  }, [isSubmitted, hasError , showAlert]);
+
+
+  
   return (
     <Container style={{ height: "85vh" }}>
+      {hasError && (
+        <Alert variant="danger" onClose={() => setHasError(false)} dismissible>
+          Form tidak lengkap. Mohon isi semua field. (tertutup dalam 2 detik)
+        </Alert>
+      )}
+      {showAlert && (
+        <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
+          Data berhasil disimpan!
+        </Alert>
+      )}
       <Card className="text-center mt-3">
         <Card.Header>Message Us</Card.Header>
         <Card.Body>
@@ -216,9 +268,19 @@ const Formulir = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          
+        <Row>
+          <Col md="3">all Data :</Col>
+          <Col md="3">{data.length}</Col>
+          <Col md="3">Delete Data :</Col>
+          <Col md="3">{countDelete}</Col>
+        </Row>
+
+
           <Table striped bordered hover>
             <thead>
               <tr>
+                <th>#</th>
                 <th>Nama</th>
                 <th>Email</th>
                 <th>Telp</th>
@@ -229,6 +291,7 @@ const Formulir = () => {
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
+                  <td><Button variant="danger" onClick={() => handleDelete(item.id)}>Delete</Button></td>
                   <td>{item.nama}</td>
                   <td>{item.email}</td>
                   <td>{item.telp}</td>
